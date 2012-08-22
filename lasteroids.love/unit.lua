@@ -60,7 +60,7 @@ new = function(t)
   self.shield = self.shield or shield
 
   self.body = love.physics.newBody(world, self.x, self.y, "dynamic")
-  self.shape = love.physics.newRectangleShape(self.x, self.y, self.image:getWidth()*self.xscale, self.image:getHeight()*self.xscale, 0)
+  self.shape = love.physics.newRectangleShape(-(0.5*self.image:getWidth() * self.xscale), -(0.5*self.image:getHeight() * self.yscale), self.image:getWidth()*self.xscale, self.image:getHeight()*self.xscale)
   --[[
   self.shape = love.physics.newChainShape(true,
     self.x                                    ,  self.y,
