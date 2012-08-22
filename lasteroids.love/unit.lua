@@ -59,6 +59,20 @@ new = function(t)
   self.armorclass = self.armorclass or armorclass
   self.shield = self.shield or shield
 
+  self.body = love.physics.newBody(world, self.x, self.y, "dynamic")
+  self.shape = love.physics.newRectangleShape(self.x, self.y, self.image:getWidth()*self.xscale, self.image:getHeight()*self.xscale, 0)
+  --[[
+  self.shape = love.physics.newChainShape(true,
+    self.x                                    ,  self.y,
+    self.x + self.image:getWidth()*self.xscale,  self.y,
+    self.x + self.image:getWidth()*self.xscale,  self.y + self.image:getHeight()*self.yscale,
+    self.x                                    ,  self.y + self.image:getHeight()*self.yscale)
+    --]]
+
+  self.fixture = love.physics.newFixture(self.body, self.shape, 1)
+  self.fixture:setRestitution(1)
+  self.fixture:setFriction(1)
+
   -- methods
   self.getId = function()
     return self.id

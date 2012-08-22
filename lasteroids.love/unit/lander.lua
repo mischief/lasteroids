@@ -7,10 +7,13 @@ bless = function(self)
 
   local state_idle = {
     enter = function() self.timer = 0 end,
-    execute = function()
+    execute = function(owner)
 
-      local deg = math.atan2(hero.body:getY() - self.unit.y, hero.body:getX() - self.unit.x)
-      self.unit.rotation = deg+math.rad(90)
+      local hx, hy = hero.body:getX(), hero.body:getY()
+      local ex, ey = owner.unit.body:getX(), owner.unit.body:getY()
+
+      local deg = math.atan2(hy - ey, hx - ex)
+      self.unit.body:setAngle(deg+math.rad(90))
 
     end,
     exit = function() end,

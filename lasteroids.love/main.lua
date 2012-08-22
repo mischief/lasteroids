@@ -6,16 +6,6 @@ require("unit.lander")
 -- game init code
 function love.load()
 
-  hero = unit.new{name="hero", sprite="galaga_ship.png", x=650, y=650, speed=200, xscale=0.25, yscale=0.25}
-
-  for i=1,10 do
-    unit.lander.new{y=100, x=100+50*i}
-  end
-
-  for i=1,10 do
-    unit.lander.new{y=150, x=100+50*i}
-  end
-
   -- cursor off
   love.mouse.setVisible(false)
   local font = love.graphics.newFont(14)
@@ -31,11 +21,17 @@ function love.load()
 
   wall.fixture = love.physics.newFixture(wall.body, wall.shape)
 
-  hero.body = love.physics.newBody(world, 650/2, 650/2, "dynamic")
-  hero.shape = love.physics.newRectangleShape(hero.image:getWidth() * hero.yscale, hero.image:getHeight() * hero.xscale)
-  hero.fixture = love.physics.newFixture(hero.body, hero.shape, 1)
-  hero.fixture:setRestitution(0)
-  hero.fixture:setFriction(0)
+  for i=1,10 do
+    local l = unit.lander.new{y=100, x=100+50*i}
+    l.unit.body:setLinearVelocity(50, 100)
+  end
+
+  for i=1,10 do
+    local l = unit.lander.new{y=150, x=100+50*i}
+    l.unit.body:setLinearVelocity(100, 50)
+  end
+
+  hero = unit.new{name="hero", sprite="galaga_ship.png", x=650, y=650, speed=200, xscale=0.25, yscale=0.25}
 
 end
 
@@ -106,11 +102,7 @@ end
 
 function love.draw()
   for k,v in pairs(unit.getUnits()) do
-    if v ~= hero then
-      love.graphics.draw(v.image, v.x, v.y, v.rotation, v.xscale, v.yscale)
-    else
-      love.graphics.draw(hero.image, hero.body:getX(), hero.body:getY(), hero.body:getAngle(), hero.xscale, hero.scale)
-    end
+    love.graphics.draw(v.image, v.body:getX(), v.body:getY(), v.body:getAngle(), v.xscale, v.yscale)
   end
 
   local i = hero.image
