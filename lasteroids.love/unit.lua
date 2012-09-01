@@ -32,63 +32,63 @@ local speed = 50
 
 new = function(t)
 
-  local self = t or {}
+  local myself = t or {}
 
   -- members
-  self.id = id
+  myself.id = id
   id = id + 1
-  units[id] = self
+  units[myself.id] = myself
 
-  self.name = self.name or name
+  myself.name = myself.name or name
 
-  self.sprite = self.sprite or sprite
-  self.image = love.graphics.newImage(self.sprite)
+  myself.sprite = myself.sprite or sprite
+  myself.image = love.graphics.newImage(myself.sprite)
 
-  self.x = self.x or x
-  self.y = self.y or y
+  myself.x = myself.x or x
+  myself.y = myself.y or y
 
-  self.xscale = self.xscale or xscale
-  self.yscale = self.yscale or yscale
+  myself.xscale = myself.xscale or xscale
+  myself.yscale = myself.yscale or yscale
 
-  self.rotation = self.rot or rotation
+  myself.rotation = myself.rot or rotation
 
-  self.hp = self.hp or hp
-  self.maxhp = self.maxhp or maxhp
-  self.speed = self.speed or speed
-  self.armor = self.armor or armor
-  self.armorclass = self.armorclass or armorclass
-  self.shield = self.shield or shield
+  myself.hp = myself.hp or hp
+  myself.maxhp = myself.maxhp or maxhp
+  myself.speed = myself.speed or speed
+  myself.armor = myself.armor or armor
+  myself.armorclass = myself.armorclass or armorclass
+  myself.shield = myself.shield or shield
 
-  self.body = love.physics.newBody(world, self.x, self.y, "dynamic")
-  self.shape = love.physics.newRectangleShape(-(0.5*self.image:getWidth() * self.xscale), -(0.5*self.image:getHeight() * self.yscale), self.image:getWidth()*self.xscale, self.image:getHeight()*self.xscale)
-  --[[
-  self.shape = love.physics.newChainShape(true,
-    self.x                                    ,  self.y,
-    self.x + self.image:getWidth()*self.xscale,  self.y,
-    self.x + self.image:getWidth()*self.xscale,  self.y + self.image:getHeight()*self.yscale,
-    self.x                                    ,  self.y + self.image:getHeight()*self.yscale)
-    --]]
+  myself.body = love.physics.newBody(world, myself.x, myself.y, "dynamic")
+  myself.shape = love.physics.newRectangleShape(-(0.5*myself.image:getWidth() * myself.xscale), -(0.5*myself.image:getHeight() * myself.yscale), myself.image:getWidth()*myself.xscale, myself.image:getHeight()*myself.xscale)
 
-  self.fixture = love.physics.newFixture(self.body, self.shape, 1)
-  self.fixture:setRestitution(1)
-  self.fixture:setFriction(1)
+  myself.fixture = love.physics.newFixture(myself.body, myself.shape, 1)
+  myself.fixture:setUserData(myself.name .. ' ' .. myself.id)
+  myself.fixture:setRestitution(0)
+  myself.fixture:setFriction(0)
 
   -- methods
-  self.getId = function()
-    return self.id
+  myself.getId = function()
+    return myself.id
   end
 
-  self.getLoc = function()
-    return self.x, self.y
+  myself.getLoc = function()
+    return myself.x, myself.y
   end
 
-  self.update = function()
+  myself.update = function()
   end
 
---  setmetatable(self, self)
---  self.__index = self
+  -- stupid bug, uncomment destroy
+  myself.destroy = function()
+    --myself.body:destroy()
+    units[myself.getId()] = nil
+  end
 
-  return self
+--  setmetatable(myself, myself)
+--  myself.__index = myself
+
+  return myself
 end
 
 getUnits = function()

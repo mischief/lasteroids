@@ -2,6 +2,7 @@ require("unit")
 require("ai")
 
 require("unit.lander")
+require("unit.laser")
 
 -- game init code
 function love.load()
@@ -20,20 +21,20 @@ function love.load()
   wall.shape = love.physics.newChainShape(true, 50, 50, love.graphics.getWidth() - 50, 50, love.graphics.getWidth() - 50, love.graphics.getHeight() - 50, 50, love.graphics.getHeight() - 50)
   wall.fixture = love.physics.newFixture(wall.body, wall.shape)
 
-  for i=1,10 do
-    local l = unit.lander.new{y=100, x=100+50*i}
+  for i=1,2 do
+    local l = unit.lander.new{y=100, x=100+250*i}
     l.unit.body:setLinearVelocity(100, 100)
   end
 
-  for i=1,10 do
-    local l = unit.lander.new{y=150, x=100+50*i}
+  for i=1,2 do
+    local l = unit.lander.new{y=150, x=100+250*i}
     l.unit.body:setLinearVelocity(-100, 100)
   end
 
   hero = unit.new{name="hero", sprite="galaga_ship.png", x=250, y=250, speed=200, xscale=0.25, yscale=0.25}
   hero.fixture:setRestitution(0)
   hero.fixture:setFriction(1)
-  hero.body:setAngularDamping(math.huge)
+  --hero.body:setAngularDamping(math.huge)
 
 end
 
@@ -56,23 +57,38 @@ function love.update(dt)
   if t > 0.01 then
     t = 0
     for k,v in pairs(ai.getAIs()) do
-      local u = v.unit
       v.fsm.update()
     end
   end
 
-  local force = 2000
+  local force = 1000
+  local kb = love.keyboard
 
-  if love.keyboard.isDown("right") then
-    hero.body:applyForce(force, 0)
-  elseif love.keyboard.isDown("left") then
-    hero.body:applyForce(-force, 0)
+  if kb.isDown("right") then
+    hero.body:applyAngularImpulse(100)
+  elseif kb.isDown("left") then
+    hero.body:applyAngularImpulse(-100)
   end
 
-  if love.keyboard.isDown("down") then
-    hero.body:applyForce(0, force)
-  elseif love.keyboard.isDown("up") then
-    hero.body:applyForce(0, -force)
+  local angle = hero.body:getAngle()
+
+  local vx = math.cos(angle+math.rad(90)) * force
+  local vy = math.sin(angle+math.rad(90)) * force
+
+  if kb.isDown("down") then
+    hero.body:applyForce(vx, vy)
+  elseif kb.isDown("up") then
+    hero.body:applyForce(-vx, -vy)
+  end
+
+  s = 0
+  s = s + dt
+  -- shoot
+  if kb.isDown(" ")  and s > 0.005 then
+    s = 0
+    local x,y = hero.body:getWorldCenter()
+    local l = unit.laser.new{x=x,y=y, rot=angle}
+    l.unit.body:applyForce(-vx, -vy)
   end
 
 end

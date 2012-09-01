@@ -2,28 +2,28 @@ module(..., package.seeall)
 
 -- make a new state machine
 new = function(owner)
-  local self = {}
-  setmetatable(self, self)
-  self.__index = self
+  local myself = {}
+  setmetatable(myself, myself)
+  myself.__index = myself
 
-  self.owner = owner
-  self.state = {}
+  myself.owner = owner
+  myself.state = {}
 
-  self.update = function()
-      self.state.execute(owner)
+  myself.update = function()
+      myself.state.execute(myself.owner)
   end
 
   -- set state and dont call anything
-  self.setState = function(state)
-    self.state = state
+  myself.setState = function(state)
+    myself.state = state
   end
 
   -- transisition between states and call their enter/exit methods
-  self.changeState = function(state)
-    if self.state.exit then self.state.exit(owner) end
-    self.state = state
-    self.state.enter(owner)
+  myself.changeState = function(state)
+    if myself.state.exit then myself.state.exit(myself.owner) end
+    myself.state = state
+    if myself.state.enter then myself.state.enter(myself.owner) end
   end
 
-  return self
+  return myself
 end

@@ -9,7 +9,8 @@ bless = function(self)
     enter = function() self.timer = 0 end,
     execute = function(owner)
 
-      local hx, hy = hero.body:getX(), hero.body:getY()
+      --local hx, hy = hero.body:getX(), hero.body:getY()
+      local hx, hy = hero.body:getWorldCenter()
       local ex, ey = owner.unit.body:getX(), owner.unit.body:getY()
 
       local deg = math.atan2(hy - ey, hx - ex)
@@ -27,6 +28,8 @@ end
 new = function(t)
 
   local self = t or {}
+
+  self.name = "Lander"
 
   self.hp = 100
   self.maxhp = 100
