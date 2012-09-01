@@ -79,9 +79,8 @@ new = function(t)
   myself.update = function()
   end
 
-  -- stupid bug, uncomment destroy
   myself.destroy = function()
-    --myself.body:destroy()
+    myself.body:destroy()
     units[myself.getId()] = nil
   end
 

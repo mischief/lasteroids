@@ -10,6 +10,7 @@ bless = function(myself)
       local etime = love.timer.getTime()
       if etime - myself.timer > 2 then
         myself.unit:destroy()
+        myself.fsm:changeState({})
       end
     end,
     exit = function() end,

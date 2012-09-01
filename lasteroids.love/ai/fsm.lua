@@ -3,14 +3,16 @@ module(..., package.seeall)
 -- make a new state machine
 new = function(owner)
   local myself = {}
-  setmetatable(myself, myself)
-  myself.__index = myself
+--  setmetatable(myself, myself)
+--  myself.__index = myself
 
   myself.owner = owner
   myself.state = {}
 
   myself.update = function()
+    if myself.state.execute then
       myself.state.execute(myself.owner)
+    end
   end
 
   -- set state and dont call anything
