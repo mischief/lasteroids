@@ -7,15 +7,20 @@ ais = {}
 
 new = function(unit)
   local self = {}
---  setmetatable(self,self)
---  self.__index = self
+
+  ais[aicount] = self
+  aicount = aicount + 1
 
   self.unit = unit
 
   self.fsm = ai.fsm.new(self)
 
-  ais[aicount] = self
-  aicount = aicount + 1
+  self.unit.fixture:setUserData(self)
+
+  self.destroy = function()
+    self.unit.destroy()
+    self.fsm.changeState({})
+  end
 
   return self
 end

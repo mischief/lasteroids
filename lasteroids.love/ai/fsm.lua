@@ -3,8 +3,6 @@ module(..., package.seeall)
 -- make a new state machine
 new = function(owner)
   local myself = {}
---  setmetatable(myself, myself)
---  myself.__index = myself
 
   myself.owner = owner
   myself.state = {}
@@ -23,7 +21,7 @@ new = function(owner)
   -- transisition between states and call their enter/exit methods
   myself.changeState = function(state)
     if myself.state.exit then myself.state.exit(myself.owner) end
-    myself.state = state
+    myself.setState(state)
     if myself.state.enter then myself.state.enter(myself.owner) end
   end
 

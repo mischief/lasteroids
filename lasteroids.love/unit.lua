@@ -63,8 +63,8 @@ new = function(t)
   myself.shape = love.physics.newRectangleShape(-(0.5*myself.image:getWidth() * myself.xscale), -(0.5*myself.image:getHeight() * myself.yscale), myself.image:getWidth()*myself.xscale, myself.image:getHeight()*myself.xscale)
 
   myself.fixture = love.physics.newFixture(myself.body, myself.shape, 1)
-  myself.fixture:setUserData(myself.name .. ' ' .. myself.id)
-  myself.fixture:setRestitution(0)
+  myself.fixture:setUserData(myself)
+  myself.fixture:setRestitution(1)
   myself.fixture:setFriction(0)
 
   -- methods
@@ -73,7 +73,7 @@ new = function(t)
   end
 
   myself.getLoc = function()
-    return myself.x, myself.y
+    return myself.body.getWorldCenter()
   end
 
   myself.update = function()
@@ -83,9 +83,6 @@ new = function(t)
     myself.body:destroy()
     units[myself.getId()] = nil
   end
-
---  setmetatable(myself, myself)
---  myself.__index = myself
 
   return myself
 end
