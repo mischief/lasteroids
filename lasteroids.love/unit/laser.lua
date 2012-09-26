@@ -1,5 +1,7 @@
 module(..., package.seeall)
 
+local sound = love.audio.newSource('laser.wav', 'static')
+
 bless = function(myself)
 
   myself.timer = love.timer.getTime()
@@ -15,10 +17,10 @@ bless = function(myself)
     exit = function() end,
   }
 
-  myself.fsm.state = blow_up_state
+  myself.fsm.changestate(blow_up_state)
 
-  myself.unit.fixture:setRestitution(0.2)
-  myself.unit.fixture:setFriction(0.5)
+  myself.unit.fixture:setRestitution(0.8)
+  myself.unit.fixture:setFriction(1)
 
   return myself
 end
@@ -33,6 +35,9 @@ new = function(t)
   myself.maxhp = 1
 
   myself.sprite = "laser.png"
+
+  sound:play()
+  sound:rewind()
 
   return bless(ai.new(unit.new(myself)))
 end

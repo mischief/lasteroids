@@ -61,7 +61,7 @@ function love.load()
   wall.shape = love.physics.newChainShape(true, 50, 50, love.graphics.getWidth() - 50, 50, love.graphics.getWidth() - 50, love.graphics.getHeight() - 50, 50, love.graphics.getHeight() - 50)
   wall.fixture = love.physics.newFixture(wall.body, wall.shape)
 
-  for i=1,2 do
+  for i=1,10 do
     local l = unit.lander.new{y=100, x=100+50*i}
   end
 
@@ -85,10 +85,13 @@ function love.keypressed(k)
 end
 
 aitimer = 0
+spawntimer = 0
 shoottimer = 0
 
 function love.update(dt)
   world:update(dt)
+
+  local delta = love.timer.getTime()
 
 --  local aidelta = love.timer.getTime()
 --  if aidelta - aitimer > 0.1 then
@@ -97,6 +100,11 @@ function love.update(dt)
       v.fsm.update()
     end
 --  end
+
+  if delta - spawntimer > 4 then
+    spawntimer = delta
+    unit.lander.new{y=200, x=200}
+  end
 
   local force = 1000
   local kb = love.keyboard

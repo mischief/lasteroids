@@ -25,5 +25,8 @@ new = function(owner)
     if myself.state.enter then myself.state.enter(myself.owner) end
   end
 
+--  setmetatable(myself, myself)
+--  myself.__index = myself
+
   return myself
 end
